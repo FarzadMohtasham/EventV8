@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/FarzadMohtasham/EventV8/db"
 	"github.com/FarzadMohtasham/EventV8/models"
@@ -14,6 +15,7 @@ func main() {
 	serverEngine := gin.Default()
 
 	serverEngine.GET("/events", getEvents)
+	serverEngine.GET("/events/:id", getEvent)
 	serverEngine.POST("/events", createEvent)
 
 	serverEngine.Run(":8880")
@@ -63,5 +65,32 @@ func createEvent(ctx *gin.Context) {
 		"error":   false,
 		"message": "New event created successfully",
 		"event":   newEvent,
+	})
+}
+
+func getEvent(ctx *gin.Context) {
+	eventId, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   true,
+			"message": "Failed to process because of bad request",
+		})
+		return
+	}
+
+	event, err := models.GetEventById(eventId)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   true,
+			"message": "Could not process this request",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"data":  event,
 	})
 }
