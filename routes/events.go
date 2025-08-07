@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetEvents(ctx *gin.Context) {
+func getEvents(ctx *gin.Context) {
 	events, err := models.GetAllEvents()
 	log.Println(err)
 	if err != nil {
@@ -22,8 +22,8 @@ func GetEvents(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, events)
 }
 
-func CreateEvent(ctx *gin.Context) {
-	var events models.Event
+func createEvent(ctx *gin.Context) {
+var events models.Event
 	err := ctx.ShouldBindJSON(&events)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -60,7 +60,7 @@ func CreateEvent(ctx *gin.Context) {
 	})
 }
 
-func GetEvent(ctx *gin.Context) {
+func getEvent(ctx *gin.Context) {
 	eventId, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 
 	if err != nil {
@@ -87,7 +87,7 @@ func GetEvent(ctx *gin.Context) {
 	})
 }
 
-func UpdateEvent(ctx *gin.Context) {
+func updateEvent(ctx *gin.Context) {
 	eventId, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 
 	if err != nil {
@@ -136,7 +136,7 @@ func UpdateEvent(ctx *gin.Context) {
 	})
 }
 
-func DeleteEvent(ctx *gin.Context) {
+func deleteEvent(ctx *gin.Context) {
 	eventId, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

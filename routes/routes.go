@@ -10,11 +10,11 @@ func RegisterRoutes(eventV8Engine *gin.Engine) {
 }
 
 func registerEventRoutes(eventV8Engine *gin.Engine) {
-	eventV8Engine.GET("/events", GetEvents)
-	eventV8Engine.GET("/events/:id", GetEvent)
-	eventV8Engine.POST("/events", CreateEvent)
-	eventV8Engine.PUT("/events/:id", UpdateEvent)
-	eventV8Engine.DELETE("/events/:id", DeleteEvent)
+	eventV8Engine.GET("/events", getEvents)
+	eventV8Engine.GET("/events/:id", getEvent)
+	eventV8Engine.POST("/events", createEvent)
+	eventV8Engine.PUT("/events/:id", updateEvent)
+	eventV8Engine.DELETE("/events/:id", deleteEvent)
 }
 
 func registerAuthRoutes(eventV8Engine *gin.Engine) {
