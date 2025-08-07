@@ -4,15 +4,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterRoutes(eventV8 *gin.Engine) {
-	registerEventRoutes(eventV8)
+func RegisterRoutes(eventV8Engine *gin.Engine) {
+	registerEventRoutes(eventV8Engine)
+	registerAuthRoutes(eventV8Engine)
 }
 
-func registerEventRoutes(eventV8 *gin.Engine) {
-	eventV8.GET("/events", GetEvents)
-	eventV8.GET("/events/:id", GetEvent)
-	eventV8.POST("/events", CreateEvent)
-	eventV8.PUT("/events/:id", UpdateEvent)
-	eventV8.DELETE("/events/:id", DeleteEvent)
+func registerEventRoutes(eventV8Engine *gin.Engine) {
+	eventV8Engine.GET("/events", GetEvents)
+	eventV8Engine.GET("/events/:id", GetEvent)
+	eventV8Engine.POST("/events", CreateEvent)
+	eventV8Engine.PUT("/events/:id", UpdateEvent)
+	eventV8Engine.DELETE("/events/:id", DeleteEvent)
+}
 
+func registerAuthRoutes(eventV8Engine *gin.Engine) {
+	eventV8Engine.POST("/signup", signup)
 }
