@@ -1,0 +1,9 @@
+POST http://localhost:8880/events
+Content-Type: application/json
+
+{
+    "name": "Farzad | Dev Event",
+    "description": "this is the most perfect event of all the time",
+    "location": "USA",
+    "date": "2025-01-01T15:30:00.000Z"
+}

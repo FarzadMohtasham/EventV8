@@ -1,0 +1,9 @@
+PUT http://localhost:8880/events/9
+Content-Type: application/json
+
+{
+    "name":"updated Farzad | Dev Event",
+    "description": "description",
+    "location": "Germany",
+    "dateTime": "2025-01-01T15:30:00Z"
+}
