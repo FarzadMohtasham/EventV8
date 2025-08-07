@@ -1,6 +1,11 @@
 package models
 
-import "github.com/FarzadMohtasham/EventV8/db"
+import (
+	"errors"
+
+	"github.com/FarzadMohtasham/EventV8/db"
+	"github.com/FarzadMohtasham/EventV8/utils"
+)
 
 type User struct {
 	ID       int
@@ -8,7 +13,7 @@ type User struct {
 	Password string `binding:"required"`
 }
 
-func (user User) Save() error {
+func (u User) Save() error {
 	query := "INSERT INTO users(email, password) VALUES (?, ?)"
 	stmt, err := db.DB.Prepare(query)
 
@@ -17,9 +22,13 @@ func (user User) Save() error {
 	}
 	defer stmt.Close()
 
-	// Encrypt user password
+	hashedPassword, err := utils.HashPassword(u.Password)
 
-	result, err := stmt.Exec(user.Email, user.Password)
+	if err != nil {
+		return err
+	}
+
+	result, err := stmt.Exec(u.Email, hashedPassword)
 	if err != nil {
 		return err
 	}
@@ -29,6 +38,26 @@ func (user User) Save() error {
 		return err
 	}
 
-	user.ID = int(userId)
+	u.ID = int(userId)
+	return nil
+}
+
+func (u User) ValidateCredentials() error {
+	query := "SELECT id, password FROM users WHERE email = ?"
+	row := db.DB.QueryRow(query, u.Email)
+
+	var retrievedPassword string
+	err := row.Scan(&u.ID, &retrievedPassword)
+
+	if err != nil {
+		return errors.New("invalid credentials")
+	}
+
+	passwordIsValid := utils.CheckHashPassword(u.Password, retrievedPassword)
+
+	if !passwordIsValid {
+		return errors.New("invalid credentials")
+	}
+
 	return nil
 }

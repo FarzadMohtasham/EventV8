@@ -19,4 +19,5 @@ func registerEventRoutes(eventV8Engine *gin.Engine) {
 
 func registerAuthRoutes(eventV8Engine *gin.Engine) {
 	eventV8Engine.POST("/signup", signup)
+	eventV8Engine.POST("/login", login)
 }
