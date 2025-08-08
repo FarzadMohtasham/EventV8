@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"github.com/FarzadMohtasham/EventV8/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,9 +13,13 @@ func RegisterRoutes(eventV8Engine *gin.Engine) {
 func registerEventRoutes(eventV8Engine *gin.Engine) {
 	eventV8Engine.GET("/events", getEvents)
 	eventV8Engine.GET("/events/:id", getEvent)
-	eventV8Engine.POST("/events", createEvent)
-	eventV8Engine.PUT("/events/:id", updateEvent)
-	eventV8Engine.DELETE("/events/:id", deleteEvent)
+
+	authenticated := eventV8Engine.Group("/")
+	authenticated.Use(middlewares.Authenticate)
+
+	authenticated.POST("/events", createEvent)
+	authenticated.PUT("/events/:id", updateEvent)
+	authenticated.DELETE("/events/:id", deleteEvent)
 }
 
 func registerAuthRoutes(eventV8Engine *gin.Engine) {

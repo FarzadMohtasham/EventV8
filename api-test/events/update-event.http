@@ -1,5 +1,6 @@
-PUT http://localhost:8880/events/9
+PUT http://localhost:8880/events/5
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZhcnphZEBnbWFpbC5jb20iLCJleHAiOjE3NTQ2OTUzNDMsInVzZXJJZCI6Mn0.zMfYNTfankyqAwqKOV9g9xiV-c85F_qI3oZs9yEngr8
 
 {
     "name":"updated Farzad | Dev Event",

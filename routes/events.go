@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"github.com/FarzadMohtasham/EventV8/models"
-	"github.com/FarzadMohtasham/EventV8/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,26 +23,8 @@ func getEvents(ctx *gin.Context) {
 }
 
 func createEvent(ctx *gin.Context) {
-	token := ctx.Request.Header.Get("Authorization")
-	if token == "" {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"error":   true,
-			"message": "Not Authorized",
-		})
-		return
-	}
-
-	userId, err := utils.VerifyToken(token)
-	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"error":   true,
-			"message": "Not Authorized",
-		})
-		return
-	}
-
 	var events models.Event
-	err = ctx.ShouldBindJSON(&events)
+	err := ctx.ShouldBindJSON(&events)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error":   true,
@@ -51,6 +32,8 @@ func createEvent(ctx *gin.Context) {
 		})
 		return
 	}
+
+	userId := ctx.GetInt64("userId")
 
 	newEvent := models.Event{
 		ID:          1,
@@ -117,12 +100,21 @@ func updateEvent(ctx *gin.Context) {
 		return
 	}
 
-	_, err = models.GetEventById(eventId)
+	userId := ctx.GetInt64("userId")
+	event, err := models.GetEventById(eventId)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error":   true,
 			"message": "Could not handle request",
+		})
+		return
+	}
+
+	if event.UserID != userId {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"error":   true,
+			"message": "Not Authorized to update event",
 		})
 		return
 	}
@@ -165,7 +157,9 @@ func deleteEvent(ctx *gin.Context) {
 		return
 	}
 
+	userId := ctx.GetInt64("userId")
 	event, err := models.GetEventById(eventId)
+
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error":   true,
@@ -174,7 +168,16 @@ func deleteEvent(ctx *gin.Context) {
 		return
 	}
 
+	if event.UserID != userId {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"error":   true,
+			"message": "Not Authorized to delete event",
+		})
+		return
+	}
+
 	err = event.Delete()
+
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error":   true,
