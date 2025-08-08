@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/FarzadMohtasham/EventV8/models"
+	"github.com/FarzadMohtasham/EventV8/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,8 +24,27 @@ func getEvents(ctx *gin.Context) {
 }
 
 func createEvent(ctx *gin.Context) {
-var events models.Event
-	err := ctx.ShouldBindJSON(&events)
+	token := ctx.Request.Header.Get("Authorization")
+
+	if token == "" {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"error":   true,
+			"message": "Not Authorized",
+		})
+		return
+	}
+
+	err := utils.VerifyToken(token)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"error":   true,
+			"message": "Not Authorized",
+		})
+		return
+	}
+
+	var events models.Event
+	err = ctx.ShouldBindJSON(&events)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error":   true,
