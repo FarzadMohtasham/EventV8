@@ -25,7 +25,6 @@ func getEvents(ctx *gin.Context) {
 
 func createEvent(ctx *gin.Context) {
 	token := ctx.Request.Header.Get("Authorization")
-
 	if token == "" {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"error":   true,
@@ -34,7 +33,7 @@ func createEvent(ctx *gin.Context) {
 		return
 	}
 
-	err := utils.VerifyToken(token)
+	userId, err := utils.VerifyToken(token)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"error":   true,
@@ -55,7 +54,7 @@ func createEvent(ctx *gin.Context) {
 
 	newEvent := models.Event{
 		ID:          1,
-		UserID:      1,
+		UserID:      userId,
 		Name:        events.Name,
 		Description: events.Description,
 		Location:    events.Location,
@@ -139,7 +138,7 @@ func updateEvent(ctx *gin.Context) {
 		return
 	}
 
-	updatedEvent.ID = int(eventId)
+	updatedEvent.ID = int64(eventId)
 	err = updatedEvent.Update()
 
 	if err != nil {

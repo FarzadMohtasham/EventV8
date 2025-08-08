@@ -1,6 +1,6 @@
 POST http://localhost:8880/events
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZhcnphZEBnbWFpbC5jb20iLCJleHAiOjE3NTQ2NTgwNjcsInVzZXJJZCI6MH0.2i27lFnS_eCd1DNrtyY1YwEPnVOa8ZPP9MFh9_gDq_A
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZhcnphZEBnbWFpbC5jb20iLCJleHAiOjE3NTQ2NzQ1NDMsInVzZXJJZCI6Mn0.JomDckrANRmhsu0xWRdVafsEQQ44EAOX-eKjsUwP3AM
 
 {
     "name": "Farzad | Dev Event",
